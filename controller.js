@@ -6,7 +6,7 @@
 const messagesModel = require('./model.js');
 
 exports.getLatest = function (req, res) {
-  messagesModel.getLatest(10, function (err, data){
+  messagesModel.getLatest(5, function (err, data){
     if (err) res.send(400);  //  TODO:  write more logic for this
     else res.json(data);
   });

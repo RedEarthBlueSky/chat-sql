@@ -9,12 +9,13 @@ function postMsg (text) {
 function appendMsgs (msgsArr) {
   if (msgsArr.length) {
     let last = msgsArr.length - 1;
-    for (let i = 0; i <= last; i++) {
+    for (let i = last; i >= 0; i--) {
       let msg = msgsArr[i];
       let timeStr = new Date(msg.timestamp).toLocaleTimeString();
       let $div = $('<div class="message">');
       $('#messages').append(`
         <div class="message">
+          <div class="id">ID: ${msg.id}</div>
           <div class="time">Time: ${timeStr}</div>
           <p>${msg.content}</p>
         </div>
