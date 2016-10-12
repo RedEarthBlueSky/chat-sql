@@ -27,8 +27,10 @@ exports.set = function (timestamp, content, cb) {
   connection.query(`INSERT into ${tableName} (timestamp, content) values (${timestamp}, '${content}')`,
   //  try use query .on( 'result ') here from https://github.com/mysqljs/mysql
   function (err, data){
+    console.log(data);
     if (err) cb(err);
     else cb (null, {
+      id: data.insertId,
       timestamp: timestamp,
       content: content
     });
