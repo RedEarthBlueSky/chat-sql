@@ -1,33 +1,32 @@
 'use strict';
 
-let memory;   //  create
-const dbFilePath = './db.json';
+// The model sends and receives elements from the database
 
-try {
-  fs.writeFileSync(dbFilePath, JSON.stringify({db: []}), {encoding: 'utf8', flag: 'wx'});
-} catch (e) {}
-
-fs.readFile(dbFilePath, 'utf8', function (err, data) {
-  memory = JSON.parse(data);
+const mysql = require('mysql');
+const connection = mysql.createConnection({
+  host: 'localhost',
+  user: 'admin',
+  password: 'admin',
+  database: 'cw_chat'
 });
 
-function dumpMemoryToDisk () {
-  fs.writeFile(dbFilePath, JSON.stringify(memory), function (err) {
-    if (err) throw err;
+const tableName = 'messages';
+
+exports.getLatest = function (num, cb) {
+  connection.query(`SELECT * from ${tableName}`, function(err, rows, fields) {
+    if (err) cb(err);
+    cb(null, rows);
   });
-}
-
-setInterval(dumpMemoryToDisk, 10000);
-
-exports.getLatest = function (num) {
-  return memory.db.slice(-num);
 };
 
-exports.set = function (content, timestamp) {
-  let newMsg = {
-    content,
-    timestamp
-  };
-  memory.db.push(newMsg);
-  return newMsg;
+
+exports.set = function (timestamp, content, cb) {
+  connection.query(`INSERT into ${tableName} (timestamp, content) values (${timestamp}, '${content}')`, function (err, data){
+    if (err) cb(err);
+    else cb (null, {
+      timestamp: timestamp,
+      content: content
+    });
+  });
+  // return undefined;
 };

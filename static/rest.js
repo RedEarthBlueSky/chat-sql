@@ -1,7 +1,6 @@
 
 function postMsg (text) {
   $.post('/messages', {content: text}, function (data) {
-    console.log(data);
     appendMsgs([data]);
   });
 }
