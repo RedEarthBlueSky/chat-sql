@@ -12,6 +12,7 @@ const connection = mysql.createConnection({
 
 const tableName = 'messages';
 
+
 exports.getLatest = function (num) {
   return new Promise (function (resolve, reject) {
     connection.query(`SELECT * FROM ${tableName} posting ORDER BY timestamp DESC LIMIT ${num}`,
